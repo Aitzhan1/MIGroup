@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class Task : MonoBehaviour
 {
-
-   protected virtual void ActivateTask()
+   protected bool TaskResult;
+   [SerializeField] protected string TaskName, FailedText;
+   [SerializeField] protected UIPanel UIPanel;
+   public virtual void ActivateTask()
    {
       
    }
@@ -16,5 +18,10 @@ public class Task : MonoBehaviour
    protected virtual void NextTask()
    {
       
+   }
+
+   protected virtual void FailedTask()
+   {
+      UIPanel.FailedText(FailedText);
    }
 }
