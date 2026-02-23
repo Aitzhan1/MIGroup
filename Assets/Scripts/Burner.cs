@@ -7,7 +7,11 @@ public class Burner : MonoBehaviour
     [SerializeField] private Collider Collider;
     [SerializeField] private XRKnob Knob;
     [SerializeField] private ParticleSystem Fire;
-    public bool IsFireEntered { get; set; }
+    [field: SerializeField] public InteractableKnobSettings InteractableKnob { get; private set; }
+    private bool _isFireEntered;
+    public Action<Burner> OnWrong;
+    public bool GasActived { get; set; }
+    public float KnobValue => Knob.value;
     private void OnEnable()
     {
         Knob.onValueChange.AddListener(KnobRotate);
@@ -20,12 +24,18 @@ public class Burner : MonoBehaviour
 
     private void KnobRotate(float arg0)
     {
-        if (Knob.value > 0 && IsFireEntered)
+        if (Knob.value > 0 && _isFireEntered)
         {
-            Fire.Play();
+            Debug.Log("Fire"+Knob.value);
+            if (!Fire.isPlaying)
+            {
+                GasActived = true;
+                Fire.Play();
+            }
         }
-        else
+        else if (Knob.value <= 0)
         {
+            GasActived = false;
             Fire.Stop();
         }
     }
@@ -36,7 +46,25 @@ public class Burner : MonoBehaviour
         {
             if (match.IsFireEntered)
             {
-                IsFireEntered = true;
+                Debug.Log("Fire Entered");
+                _isFireEntered = true;
+                if (Knob.value > 0)
+                {
+                    GasActived = true;
+                    Fire.Play();
+                }
+            }
+        }
+
+        if (other.TryGetComponent(out Analyzer analyzer))
+        {
+            if (Knob.value <= 0)
+            {
+                analyzer.SetText("Нормуль");
+            }else if (!_isFireEntered)
+            {
+                OnWrong?.Invoke(this);
+                analyzer.SetText("Выключи комфорку");
             }
         }
     }
@@ -45,12 +73,18 @@ public class Burner : MonoBehaviour
     {
         if (other.TryGetComponent(out Match match))
         {
-            IsFireEntered = false;
+            _isFireEntered = false;
         }
     }
 
     public void ActivateCollider(bool isActive)
     {
+        Debug.Log(isActive);
         Collider.enabled = isActive;
+    }
+
+    public void ActivateKnob(bool isActive)
+    {
+        
     }
 }

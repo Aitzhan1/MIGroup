@@ -9,24 +9,13 @@ public class InteractableKnobSettings : MonoBehaviour
     [SerializeField] private Outline KnobOutline;
     private Transform _startTransform;
     
-    private void Start()
-    {
-    }
 
     public void ActivateKnob()
     {
         KnobCollider.enabled = true;
         KnobOutline.enabled = true;
-        Knob.onValueChange.AddListener(RotateKnob);
     }
-
-    private void RotateKnob(float arg0)
-    {
-        if (arg0 > Knob.value)
-        {
-            
-        }
-    }
+    
 
     public void DeactivateKnob()
     {

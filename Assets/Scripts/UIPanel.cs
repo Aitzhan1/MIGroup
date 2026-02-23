@@ -15,8 +15,12 @@ public class UIPanel : MonoBehaviour
         CheckTaskButton.onClick.AddListener(onCheckTaskClick);
     }
 
-    public void FailedText(string failedText)
+    public void RemoveListener()
     {
-        TaskName.text = failedText;
+        CheckTaskButton.onClick.RemoveAllListeners();
+    }
+    public void SetText(string text)
+    {
+        TaskName.text = text;
     }
 }

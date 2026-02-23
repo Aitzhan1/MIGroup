@@ -5,29 +5,31 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class InteractableGrabObjectSettings : MonoBehaviour
 {
     [SerializeField] private XRGrabInteractable Grab;
+    [SerializeField] private Collider Collider;
     [SerializeField] private Outline Outline;
     private Transform _startTransform;
     
-    private void Start()
-    {
-    }
 
     public void ActivateGrab()
     {
-        Grab.enabled = true;
+        if(Grab)
+            Grab.enabled = true;
+        
         if (Outline)
-        {
             Outline.enabled = true;
-        }
+
+        if (Collider)
+            Collider.enabled = true;
     }
     
     public void DeactivateGrab()
     {
-        Grab.enabled = false;
-        if (Outline)
-        {
-            Outline.enabled = false;
-        }
+        gameObject.SetActive(false);
+        // Grab.enabled = false;
+        // if (Outline)
+        // {
+        //     Outline.enabled = false;
+        // }
     }
 
     public void ResetGrab()
